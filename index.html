@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>متجر Arab Rest</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="icon" href="/assets/coin.png?v=2">
+</head>
+<body>
+    <div class="bg-shape circle-1"></div>
+    <div class="bg-shape circle-2"></div>
+    <div class="bg-shape circle-3"></div>
+
+    <header class="glass-header">
+        <div class="logo">
+            <img src="assets/banner.png" alt="Rest Logo" class="logo-img" onerror="this.src='assets/media_1789150716645.png'">
+        </div>
+        <nav class="nav-links">
+            <a href="#" onclick="showPage('home')">الرئيسية</a>
+            <a href="#" onclick="showPage('store')">المتجر</a>
+            <a href="#" onclick="showPage('top')">التوب 10</a>
+            <a href="#" id="profileLink" style="display: none;" onclick="showPage('profile')">السجل</a>
+            <a href="#" id="adminLink" style="display: none;" onclick="showPage('admin')">اللوحة</a>
+        </nav>
+        <div class="header-actions">
+            <div class="cart-icon" onclick="toggleCart()">
+                <i class="fas fa-shopping-cart"></i>
+                <span id="cartCount">0</span>
+            </div>
+            <div id="userProfile" class="user-profile">
+                <!-- User info will be loaded here -->
+            </div>
+        </div>
+    </header>
+
+    <!-- Toast Container -->
+    <div id="toastContainer" class="toast-container"></div>
+
+    <main id="content">
+        <!-- Home Page -->
+        <section id="page-home" class="page active">
+            <div class="home-container">
+                <div id="seasonBanner" class="glass-panel" style="width: 100%; max-width: 800px; margin-bottom: 20px; padding: 15px 30px; display: flex; justify-content: space-between; align-items: center; border: 1px solid rgba(255, 215, 0, 0.3); background: rgba(255, 215, 0, 0.05); border-radius: 12px; display: none;">
+                    <div style="display: flex; align-items: center; gap: 15px;">
+                        <i class="fas fa-trophy" style="font-size: 2rem; color: #FFD700;"></i>
+                        <div>
+                            <h2 id="seasonTitle" style="margin: 0; font-size: 1.5rem; color: #fff;">الموسم --</h2>
+                            <p id="seasonCountdown" style="margin: 5px 0 0 0; color: #FFD700; font-weight: bold; font-size: 1.1rem;">⏳ متبقي -- يوم على النهاية</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="home-welcome">
+                    <h1>مرحباً بك في عالم Rest <img src="/assets/coin.png" alt="Coin" style="height: 60px; width: auto; object-fit: contain; vertical-align: middle; margin-right: 10px; drop-shadow(0 0 5px rgba(255,255,255,0.3));"></h1>
+                    <p>اجمع عملاتك من خلال التفاعل والتواجد الصوتي، واستبدلها بأفضل المكافآت الحصرية من متجرنا!</p>
+                </div>
+                
+                <div class="hero-banner">
+                    <img src="assets/banner.png" alt="Arab Rest Banner" class="banner-img main-glow" onerror="this.src='assets/media_1789150716645.png'">
+                    <img src="assets/media_1789153204749.png" class="floating-icon icon-nitro" alt="Nitro">
+                    <img src="assets/media_1789152773928.png" class="floating-icon icon-roblox" alt="Roblox">
+                    <img src="assets/media_1789153226460.png" class="floating-icon icon-dollar" alt="Dollar">
+                    <img src="assets/media_1789153254385.png" class="floating-icon icon-crystal" alt="Crystal">
+                </div>
+
+                <div class="home-stats glass-panel">
+                    <i class="fas fa-users"></i> إجمالي أعضاء السيرفر: <span id="onlineCount">--</span>
+                </div>
+
+                <div class="hero-buttons">
+                    <a href="https://discord.gg/rest1" target="_blank" class="btn btn-primary"><i class="fab fa-discord"></i> دخول السيرفر</a>
+                    <button onclick="showPage('store')" class="btn btn-secondary"><i class="fas fa-store"></i> تصفح المتجر</button>
+                </div>
+
+                <div class="latest-orders glass-panel">
+                    <h3><i class="fas fa-shopping-bag"></i> آخر عمليات الشراء</h3>
+                    <div class="marquee-container">
+                        <div class="marquee" id="latestOrdersMarquee">
+                            <!-- Loaded dynamically -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Store Page -->
+        <section id="page-store" class="page">
+            <div class="page-header glass-panel">
+                <h2>متجر الجوائز 🛒</h2>
+                <p>اختر ما يناسبك وادفع برصيدك أو بالدولار</p>
+            </div>
+            <div id="storeCategoriesContainer">
+                <!-- Categories and Products load here -->
+            </div>
+        </section>
+
+        <!-- Top 10 Page -->
+        <section id="page-top" class="page">
+            <div class="page-header glass-panel">
+                <h2>لوحة الصدارة 🏆</h2>
+                <p>أغنى 10 أعضاء في سيرفر Arab Rest</p>
+            </div>
+            <div class="podium-container" id="podiumContainer">
+                <!-- Podium -->
+            </div>
+            <div class="top-list-container glass-panel" id="topListContainer">
+                <!-- List -->
+            </div>
+        </section>
+
+        <!-- Profile Page -->
+        <section id="page-profile" class="page">
+            <div class="profile-header glass-panel" style="padding:0; overflow:hidden; position:relative; margin-bottom: 20px;">
+                <div id="profileBanner" style="height: 150px; background: linear-gradient(90deg, var(--primary), var(--secondary)); width: 100%;"></div>
+                <div style="display: flex; align-items: flex-end; padding: 20px; margin-top: -60px; position: relative; z-index: 2;">
+                    <img id="profileAvatar" src="" alt="Avatar" style="width: 100px; height: 100px; border-radius: 50%; border: 4px solid var(--bg-color); background: var(--bg-color); box-shadow: 0 4px 10px rgba(0,0,0,0.5);">
+                    <div style="margin-right: 20px; padding-bottom: 10px;">
+                        <h2 id="profileName" style="margin: 0; font-size: 1.8rem; color: #fff; text-shadow: 1px 1px 3px rgba(0,0,0,0.8);">User Name</h2>
+                        <span id="profileBadges" style="display:flex; gap:5px; margin-top:5px;"></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="profile-stats-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-bottom: 20px;">
+                <div class="stat-card glass-panel text-center" style="padding: 20px;">
+                    <i class="fas fa-coins" style="font-size: 2rem; color: #FFD700; margin-bottom: 10px;"></i>
+                    <h3 style="margin:0; font-size: 1rem; color: var(--text-muted);">الرصيد الحالي</h3>
+                    <p id="profileCurrentBalance" style="font-size: 1.5rem; font-weight: bold; margin: 5px 0 0 0; color: #fff;">0</p>
+                </div>
+                <div class="stat-card glass-panel text-center" style="padding: 20px;">
+                    <i class="fas fa-shopping-bag" style="font-size: 2rem; color: #ff9a9e; margin-bottom: 10px;"></i>
+                    <h3 style="margin:0; font-size: 1rem; color: var(--text-muted);">إجمالي الطلبات</h3>
+                    <p id="profileTotalOrders" style="font-size: 1.5rem; font-weight: bold; margin: 5px 0 0 0; color: #fff;">0</p>
+                </div>
+                <div class="stat-card glass-panel text-center" style="padding: 20px;">
+                    <i class="fas fa-wallet" style="font-size: 2rem; color: #2ecc71; margin-bottom: 10px;"></i>
+                    <h3 style="margin:0; font-size: 1rem; color: var(--text-muted);">إجمالي المصروفات</h3>
+                    <p id="profileTotalSpent" style="font-size: 1.5rem; font-weight: bold; margin: 5px 0 0 0; color: #fff;">0</p>
+                </div>
+            </div>
+
+            <div class="glass-panel" style="max-width: 900px; margin: 40px auto; padding: 20px;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                    <h2 style="margin:0;"><i class="fas fa-list-alt"></i> سجل المشتريات</h2>
+                    <select id="profileHistoryFilter" onchange="loadProfile()" style="background: rgba(0,0,0,0.3); color: white; border: 1px solid rgba(255,255,255,0.1); padding: 8px 12px; border-radius: 8px; outline: none;">
+                        <option value="all">الكل</option>
+                        <option value="24h">آخر 24 ساعة</option>
+                    </select>
+                </div>
+
+                <div class="orders-header-row hidden-mobile" style="display: grid; grid-template-columns: 60px 2fr 1fr 1fr 1.5fr; gap: 10px; padding: 0 16px 10px 16px; color: rgba(255,255,255,0.5); font-weight: bold; border-bottom: 1px solid rgba(255,255,255,0.1); margin-bottom: 15px;">
+                    <div style="text-align: center;">الصورة</div>
+                    <div>اسم المنتج</div>
+                    <div style="text-align: center;">السعر</div>
+                    <div style="text-align: center;">رقم الطلب</div>
+                    <div style="text-align: left;">التاريخ</div>
+                </div>
+
+                <div id="profileOrdersList" class="orders-list-container">
+                    <!-- Loaded dynamically -->
+                </div>
+            </div>
+        </section>
+
+
+        <!-- Admin Dashboard -->
+        <section id="page-admin" class="page">
+            <div class="page-header glass-panel">
+                <h2>لوحة التحكم الإدارية ⚙️</h2>
+            </div>
+            
+            <div class="admin-grid">
+                <!-- Products -->
+                <div class="admin-card glass-panel">
+                    <h3>إضافة منتج جديد</h3>
+                    <form id="addProductForm">
+                        <label class="form-label">اسم المنتج</label>
+                        <input type="text" id="pName" class="form-input" placeholder="اسم المنتج" required>
+                        
+                        <label class="form-label" style="margin-top:10px;">وصف المنتج</label>
+                        <input type="text" id="pDesc" class="form-input" placeholder="الوصف" required>
+                        
+                        <label class="form-label" style="margin-top:10px;">رابط الصورة (URL)</label>
+                        <input type="text" id="pImage" class="form-input" placeholder="رابط الصورة (URL)" required style="text-align:left;" dir="ltr">
+                        
+                        <div style="display:grid; grid-template-columns: 1fr 1fr; gap:15px; margin-top:15px;">
+                            <div>
+                                <label class="form-label">السعر بالدولار ($)</label>
+                                <input type="number" id="pPriceUsd" class="form-input" placeholder="السعر بالدولار" required step="0.01">
+                            </div>
+                            <div>
+                                <label class="form-label">السعر بالكوينز</label>
+                                <input type="number" id="pPriceCoins" class="form-input" placeholder="السعر بالكوينز" required>
+                            </div>
+                        </div>
+                        
+                        <div style="display:grid; grid-template-columns: 1fr 1fr; gap:15px; margin-top:15px;">
+                            <div>
+                                <label class="form-label">الكمية المتوفرة (المخزون)</label>
+                                <input type="number" id="pStock" class="form-input" placeholder="الكمية المتوفرة (المخزون)" required>
+                            </div>
+                            <div>
+                                <label class="form-label">التصنيف (Category)</label>
+                                <select id="pCategory" class="form-input" required></select>
+                            </div>
+                        </div>
+                        
+                        <label class="form-label" style="margin-top:15px;">آيدي روم الديسكورد لاستلام الطلبات (إجباري)</label>
+                        <input type="text" id="pChannel" class="form-input" placeholder="Channel ID" required style="text-align:left;" dir="ltr">
+                        
+                        <button type="submit" class="btn btn-primary" style="margin-top:20px; width:100%;">إضافة للمتجر 🛒</button>
+                    </form>
+                </div>
+
+                <!-- Categories -->
+                <div class="admin-card glass-panel" style="background:rgba(0,0,0,0.4); border:1px solid rgba(255,255,255,0.1);">
+                    <h3>إدارة التصنيفات</h3>
+                    <form id="addCategoryForm">
+                        <label style="display:block; text-align:right; margin-bottom:5px; color:var(--text-light);">اسم التصنيف</label>
+                        <input type="text" id="cName" placeholder="مثال: نيتروهات" required style="background:rgba(0,0,0,0.6); color:white;">
+                        
+                        <label style="display:block; text-align:right; margin-bottom:5px; margin-top:10px; color:var(--text-light);">الترتيب (الأولوية)</label>
+                        <input type="number" id="cOrder" placeholder="الترتيب (0, 1, 2...)" value="0" required style="background:rgba(0,0,0,0.6); color:white;">
+                        
+                        <button type="submit" class="btn btn-secondary full-width" style="margin-top:15px;">إضافة تصنيف</button>
+                    </form>
+                    <div id="categoriesListAdmin" style="margin-top: 15px; display:flex; flex-direction:column; gap:5px;"></div>
+                </div>
+
+                <!-- Manage Coupons -->
+                <div class="admin-card glass-panel">
+                    <h3>إدارة أكواد الخصم</h3>
+                    <form id="addCouponForm">
+                        <input type="text" id="couponCodeInput" placeholder="كود الخصم (مثل: REST2026)" required>
+                        <input type="number" id="couponPercent" placeholder="نسبة الخصم % (مثل 20)" min="1" max="100" required>
+                        <input type="number" id="couponMaxUses" placeholder="عدد الاستخدامات الأقصى (0 = غير محدود)" value="0" required>
+                        <button type="submit" class="btn btn-primary full-width">إنشاء الكود</button>
+                    </form>
+                    <div id="couponsList" style="margin-top: 15px; max-height:200px; overflow-y:auto;"></div>
+                </div>
+
+                <!-- Manage Products -->
+                <div class="admin-card glass-panel" style="grid-column: 1 / -1;">
+                    <h3>المنتجات الحالية (حذف / تعديل)</h3>
+                    <div id="adminProductsList" style="display:flex; flex-direction:column; gap:10px; max-height:300px; overflow-y:auto; padding-right:5px;"></div>
+                </div>
+
+                <!-- Manage Admins (Owner Only) -->
+                <div class="admin-card glass-panel" id="manageAdminsSection" style="display: none;">
+                    <h3>إدارة المسؤولين (للمالك فقط)</h3>
+                    <form id="addAdminForm">
+                        <input type="text" id="adminId" placeholder="آيدي الديسكورد" required>
+                        <button type="submit" class="btn btn-primary full-width">إضافة مسؤول</button>
+                    </form>
+                    <div id="adminsList" style="margin-top: 15px;"></div>
+                </div>
+
+                <!-- Season Management Section (Owner Only) -->
+                <div id="manageSeasonSection" class="admin-card glass-panel" style="display:none; border: 1px solid rgba(255,215,0,0.3); grid-column: 1 / -1;">
+                    <h3 style="margin-bottom:15px; color: #FFD700;"><i class="fas fa-trophy"></i> التحكم بالموسم (المالك فقط)</h3>
+                    <div style="display: flex; gap: 15px; flex-wrap: wrap;">
+                        <button onclick="startSeason()" class="btn btn-primary" style="flex: 1; min-width: 200px;"><i class="fas fa-play"></i> بدء سيزون جديد (30 يوم)</button>
+                        <button onclick="endSeason()" class="btn" style="flex: 1; min-width: 200px; background: #e74c3c; color: white;"><i class="fas fa-stop"></i> إنهاء وتصفير السيزون</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Orders Log -->
+            <div class="admin-card glass-panel" style="margin-top: 20px;">
+                <h3>سجل الطلبات الأخير</h3>
+                <div style="overflow-x: auto;">
+                    <table class="orders-table">
+                        <thead>
+                            <tr>
+                                <th>رقم الطلب</th>
+                                <th>المشتري</th>
+                                <th>المنتج</th>
+                                <th>الكمية</th>
+                                <th>طريقة الدفع</th>
+                                <th>المبلغ</th>
+                                <th>التاريخ</th>
+                            </tr>
+                        </thead>
+                        <tbody id="ordersLogBody">
+                            <!-- Orders log -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Overlays -->
+    <!-- Streak Modal -->
+    <div id="streakOverlay" class="overlay" style="display: none; z-index: 2000; background: rgba(0,0,0,0.85);" onclick="closeStreakModal()">
+        <div class="modal glass-panel text-center" style="max-width: 800px; position:relative; padding: 40px 20px;" onclick="event.stopPropagation();">
+            <button onclick="closeStreakModal()" style="position:absolute; top: 15px; right: 15px; background:none; border:none; color:white; font-size:24px; cursor:pointer; transition:0.3s;" onmouseover="this.style.color='#ff4757'" onmouseout="this.style.color='white'">✖</button>
+            <h2 style="font-size: 2rem; color: #FFD700; margin-bottom: 10px; text-shadow: 0 0 15px rgba(255,215,0,0.5);">🔥 جوائز الستريك اليومي</h2>
+            <p style="color: var(--text-muted); margin-bottom: 30px; font-size: 1.1rem;">افتح صندوقك اليومي! الجوائز تزداد قيمة يوماً بعد يوم، لا تفوت السلسلة!</p>
+            
+            <div id="streakDaysContainer" style="display: flex; justify-content: center; gap: 15px; margin-bottom: 40px; flex-wrap: wrap;">
+                <!-- Streak icons loaded here via JS -->
+            </div>
+
+            <button id="claimStreakBtn" class="btn btn-primary full-width" onclick="claimStreak()" style="font-size: 1.5rem; padding: 18px; border-radius: 50px; font-weight:bold; text-shadow: 0 0 10px rgba(0,0,0,0.5); background: linear-gradient(45deg, #FFD700, #ff8c00); border: 2px solid #FFD700; box-shadow: 0 0 20px rgba(255,215,0,0.4); color:#000;">استلم جائزتك 🎁</button>
+
+            <!-- Dev Toolbar -->
+            <div id="streakDevToolbar" style="display: none; margin-top: 30px; padding: 15px; border-top: 2px dashed #ff4757; background: rgba(255,71,87,0.1); border-radius: 10px;">
+                <h4 style="color: #ff4757; margin-bottom: 10px;"><i class="fas fa-tools"></i> أدوات المطور (Dev Only)</h4>
+                <div style="display: flex; gap: 10px; justify-content: center;">
+                    <button class="btn btn-secondary" style="font-size: 0.8rem; padding: 5px 10px; background: #e67e22;" onclick="devSkipStreak()">⏩ تخطي 24 ساعة</button>
+                    <button class="btn btn-secondary" style="font-size: 0.8rem; padding: 5px 10px; background: #e74c3c;" onclick="devResetStreak()">🔄 تصفير</button>
+                    <button class="btn btn-secondary" style="font-size: 0.8rem; padding: 5px 10px; background: #9b59b6;" onclick="devJumpStreak7()">🎰 قفز لليوم 7</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="notInGuildOverlay" class="overlay glass-overlay" style="display: none;">
+        <div class="modal glass-panel text-center">
+            <h2>⚠️ دخول السيرفر مطلوب</h2>
+            <p>يجب أن تكون متواجداً داخل سيرفر Rest لإتمام الشراء واستلام طلبك!</p>
+            <a href="https://discord.gg/rest1" target="_blank" class="btn btn-primary" onclick="checkAuth()">انضم للسيرفر الآن</a>
+        </div>
+    </div>
+
+    <!-- Cart Overlay -->
+    <div id="cartOverlay" class="overlay glass-overlay" style="display: none;">
+        <div class="cart-modal glass-panel">
+            <div class="cart-header">
+                <h2>سلة المشتريات</h2>
+                <i class="fas fa-times close-cart" onclick="toggleCart()"></i>
+            </div>
+            <div class="cart-items" id="cartItems"></div>
+            <div class="cart-summary">
+                <div style="display:flex; gap:10px; margin-bottom:5px;">
+                    <input type="text" id="couponCode" placeholder="كود الخصم (إن وجد)" style="flex:1; padding:12px; background:rgba(0,0,0,0.3); border:1px solid var(--glass-border); border-radius:8px; color:#fff; text-align:center;">
+                    <button class="btn btn-secondary" onclick="applyCoupon()" style="padding:0 20px;">تطبيق الكود</button>
+                </div>
+                <div id="couponMessage" style="text-align:center; margin-bottom:15px; font-weight:bold; font-size:0.9em;"></div>
+                
+                <div class="totals" style="display:flex; justify-content:space-between; align-items:center; background:var(--primary); padding:10px 15px; border-radius:8px; margin-bottom:15px; font-weight:bold;">
+                    <div style="display:flex; flex-direction:column; gap:5px;">
+                        <div style="display:flex; align-items:center; gap:5px;"><img src="/assets/coin.png" style="height:20px;"> <span id="cartTotalCoins">0</span></div>
+                        <div id="coinsDiscountBox" style="display:none; color:#2ecc71; font-size:0.85em;">بعد الخصم: <img src="/assets/coin.png" style="height:15px;"> <span id="cartTotalCoinsDiscount">0</span></div>
+                    </div>
+                    <div style="display:flex; flex-direction:column; gap:5px; text-align:left;">
+                        <div style="color:#2ecc71;"><i class="fas fa-dollar-sign"></i> <span id="cartTotalUsd">0</span></div>
+                        <div id="usdDiscountBox" style="display:none; color:#2ecc71; font-size:0.85em;">بعد الخصم: <i class="fas fa-dollar-sign"></i> <span id="cartTotalUsdDiscount">0</span></div>
+                    </div>
+                </div>
+                
+                <h4 style="margin:10px 0; color:var(--text-muted); text-align:center;">اختر طريقة الدفع:</h4>
+                <div style="display:flex; gap:10px; margin-bottom:20px; align-items:stretch;">
+                    <label style="flex:1; cursor:pointer; display:flex;">
+                        <input type="radio" name="paymentMethodRadio" value="coins" checked style="display:none;" id="payCoinsRadio">
+                        <div class="pay-method-card" id="cardCoins" style="flex:1; display:flex; flex-direction:column; justify-content:center; align-items:center; background:rgba(255,255,255,0.1); border:2px solid var(--accent); border-radius:8px; padding:15px; text-align:center; transition:0.3s;">
+                            <img src="/assets/coin.png" style="height:30px; margin-bottom:5px;">
+                            <div style="font-weight:bold;">دفع بالكوينز</div>
+                        </div>
+                    </label>
+                    <label style="flex:1; cursor:pointer; display:flex;">
+                        <input type="radio" name="paymentMethodRadio" value="usd" style="display:none;" id="payUsdRadio">
+                        <div class="pay-method-card" id="cardUsd" style="flex:1; display:flex; flex-direction:column; justify-content:center; align-items:center; background:rgba(255,255,255,0.05); border:2px solid transparent; border-radius:8px; padding:15px; text-align:center; transition:0.3s;">
+                            <i class="fas fa-dollar-sign" style="font-size:30px; color:#2ecc71; margin-bottom:5px;"></i>
+                            <div style="font-weight:bold;">دفع بالدولار <br><small>(عبر تكت)</small></div>
+                        </div>
+                    </label>
+                </div>
+                
+                <script>
+                    document.getElementById('payCoinsRadio').addEventListener('change', (e) => {
+                        if(e.target.checked) {
+                            document.getElementById('cardCoins').style.borderColor = 'var(--accent)';
+                            document.getElementById('cardCoins').style.background = 'rgba(255,255,255,0.1)';
+                            document.getElementById('cardUsd').style.borderColor = 'transparent';
+                            document.getElementById('cardUsd').style.background = 'rgba(255,255,255,0.05)';
+                        }
+                    });
+                    document.getElementById('payUsdRadio').addEventListener('change', (e) => {
+                        if(e.target.checked) {
+                            document.getElementById('cardUsd').style.borderColor = '#2ecc71';
+                            document.getElementById('cardUsd').style.background = 'rgba(46, 204, 113, 0.1)';
+                            document.getElementById('cardCoins').style.borderColor = 'transparent';
+                            document.getElementById('cardCoins').style.background = 'rgba(255,255,255,0.05)';
+                        }
+                    });
+                </script>
+
+                <input type="hidden" id="paymentMethod" value="coins">
+                <button class="btn btn-primary full-width" onclick="checkout()">إتمام الشراء</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Msg Modal -->
+    <div id="msgOverlay" class="overlay glass-overlay" style="display: none; z-index: 9999;">
+        <div class="modal glass-panel text-center">
+            <h2 id="msgTitle">رسالة</h2>
+            <p id="msgBody">نص الرسالة هنا.</p>
+            <button class="btn btn-primary" onclick="closeMsg()">حسناً</button>
+        </div>
+    </div>
+
+    <!-- Custom Confirm Modal -->
+    <div id="confirmModalOverlay" class="overlay glass-overlay" style="display: none; z-index: 9999;">
+        <div class="modal glass-panel text-center" style="max-width: 400px; padding: 25px;">
+            <h2 style="color:var(--accent); margin-bottom:15px;">⚠️ تأكيد الإجراء</h2>
+            <p id="confirmMessage" style="margin-bottom:20px; font-size:1.1em;">هل أنت متأكد؟</p>
+            <div style="display:flex; gap:10px; justify-content:center;">
+                <button id="confirmYesBtn" class="btn btn-primary" style="flex:1; background:#e74c3c;">نعم، حذف 🗑️</button>
+                <button onclick="closeConfirmModal()" class="btn btn-secondary" style="flex:1;">إلغاء ❌</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit Product Modal -->
+    <div id="editProductOverlay" class="overlay glass-overlay" style="display: none; z-index: 9998; backdrop-filter: blur(8px);">
+        <div class="modal glass-panel" style="width: 90%; max-width: 500px; padding: 25px; background: rgba(15, 15, 20, 0.95); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; max-height:90vh; overflow-y:auto; text-align:right;">
+            <h2 style="text-align:center; margin-bottom:20px; color:var(--accent);">تعديل المنتج ✏️</h2>
+            <form id="editProductForm">
+                <input type="hidden" id="epId">
+                
+                <label class="form-label">اسم المنتج</label>
+                <input type="text" id="epName" class="form-input" placeholder="اسم المنتج" required>
+                
+                <label class="form-label" style="margin-top:10px;">وصف المنتج</label>
+                <input type="text" id="epDesc" class="form-input" placeholder="الوصف" required>
+                
+                <label class="form-label" style="margin-top:10px;">رابط الصورة (URL)</label>
+                <input type="text" id="epImage" class="form-input" placeholder="رابط الصورة (URL)" required style="text-align:left;" dir="ltr">
+                
+                <div style="display:grid; grid-template-columns: 1fr 1fr; gap:15px; margin-top:15px;">
+                    <div>
+                        <label class="form-label">السعر بالدولار ($)</label>
+                        <input type="number" id="epPriceUsd" class="form-input" placeholder="السعر بالدولار" required step="0.01">
+                    </div>
+                    <div>
+                        <label class="form-label">السعر بالكوينز</label>
+                        <input type="number" id="epPriceCoins" class="form-input" placeholder="السعر بالكوينز" required>
+                    </div>
+                </div>
+                
+                <div style="display:grid; grid-template-columns: 1fr 1fr; gap:15px; margin-top:15px;">
+                    <div>
+                        <label class="form-label">الكمية المتوفرة (المخزون)</label>
+                        <input type="number" id="epStock" class="form-input" placeholder="المخزون" required>
+                    </div>
+                    <div>
+                        <label class="form-label">التصنيف (Category)</label>
+                        <select id="epCategory" class="form-input" required></select>
+                    </div>
+                </div>
+                
+                <label class="form-label" style="margin-top:15px;">آيدي روم الديسكورد لاستلام الطلبات (إجباري)</label>
+                <input type="text" id="epChannel" class="form-input" placeholder="Channel ID" required style="text-align:left;" dir="ltr">
+                
+                <div style="display:flex; gap:10px; margin-top:20px;">
+                    <button type="submit" class="btn btn-primary" style="flex:1; padding:12px; font-size:16px;">حفظ التعديلات ✅</button>
+                    <button type="button" class="btn btn-secondary" style="flex:1; padding:12px; font-size:16px; background:#e74c3c; color:white; border:none;" onclick="document.getElementById('editProductOverlay').style.display='none'">إلغاء ❌</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Custom Confirm Modal -->
+    <div id="customConfirmModal" class="modal-overlay" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 10000; justify-content: center; align-items: center; backdrop-filter: blur(5px);">
+        <div class="glass-panel" style="width: 90%; max-width: 400px; padding: 30px; text-align: center; border: 1px solid rgba(255,255,255,0.2);">
+            <i class="fas fa-exclamation-triangle" style="font-size: 3rem; color: #f39c12; margin-bottom: 15px;"></i>
+            <h2 id="confirmModalTitle" style="margin-bottom: 15px; color: #fff;">تأكيد</h2>
+            <p id="confirmModalMessage" style="color: var(--text-muted); margin-bottom: 25px; line-height: 1.5; font-size: 1.1rem;"></p>
+            <div style="display: flex; gap: 15px;">
+                <button id="confirmModalBtn" class="btn btn-primary" style="flex: 1;">تأكيد</button>
+                <button onclick="closeCustomConfirm()" class="btn" style="flex: 1; background: rgba(255,255,255,0.1); color: #fff;">إلغاء</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <script src="app.js"></script>
+
+    <!-- Floating Action Button -->
+    <div id="streakFab" onclick="openStreakModal()" style="display:none; position:fixed; left:20px; bottom:20px; background: linear-gradient(135deg, #1e1e28, #2a2a35); border: 2px solid #FFD700; padding: 15px 25px; border-radius:30px; box-shadow: 0 0 20px rgba(255, 215, 0, 0.3), inset 0 0 10px rgba(255, 215, 0, 0.1); z-index:1000; cursor:pointer; align-items:center; justify-content:center; gap: 10px; font-size:18px; font-weight:bold; color:#FFD700; transition: transform 0.2s ease, box-shadow 0.2s ease;" onmouseover="this.style.transform='scale(1.05)'; this.style.boxShadow='0 0 30px rgba(255,215,0,0.6)'" onmouseout="this.style.transform='scale(1)'; this.style.boxShadow='0 0 20px rgba(255, 215, 0, 0.3)'">
+        🎁 استلم جائزتك
+        <div id="streakFabBadge" class="pulse-badge" style="display:none; position:absolute; top:-5px; right:-5px; width:15px; height:15px; background:#ff4757; border-radius:50%; box-shadow:0 0 10px #ff4757;"></div>
+        <div onclick="event.stopPropagation(); hideStreakFab();" style="position:absolute; top:-10px; right:-10px; background:#ff4757; color:white; border:2px solid #1e1e28; border-radius:50%; width:24px; height:24px; display:flex; align-items:center; justify-content:center; font-size:12px; cursor:pointer; box-shadow: 0 0 5px rgba(0,0,0,0.5);">✖</div>
+    </div>
+
+    <!-- Celebration Modal -->
+    <div id="celebrationModal" class="overlay" style="display: none; z-index: 3000; background: rgba(0,0,0,0.85);" onclick="closeCelebration()">
+        <div class="modal glass-panel text-center" style="max-width: 400px; animation: popIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);" onclick="event.stopPropagation();">
+            <h2 style="color: #FFD700; font-size: 2rem; margin-bottom: 10px;">🎉 مبروك! 🎉</h2>
+            <img id="celebrationBoxImage" src="" alt="Box" style="width: 180px; height: 180px; object-fit: contain; margin: 10px auto; display: block; filter: drop-shadow(0 0 20px rgba(255,215,0,0.6));">
+            <h3 id="celebrationTitle" style="color: #fff; margin-bottom: 15px; font-size:1.3rem;">لقد حصلت على صندوق!</h3>
+            
+            <div style="background: rgba(0,0,0,0.4); padding: 15px; border-radius: 10px; margin-bottom: 20px;">
+                <p style="color: var(--text-muted); font-size: 0.9rem;">رصيدك السابق: <span id="oldBalanceCount">0</span></p>
+                <p style="color: #2ecc71; font-size: 1.2rem; font-weight: bold; margin-top: 5px;">رصيدك الحالي الآن: <span id="newBalanceCount">0</span></p>
+            </div>
+            
+            <button class="btn btn-primary full-width" onclick="closeCelebration()" style="font-size: 1.2rem; padding: 12px;">رائع! استمرار</button>
+        </div>
+    </div>
+</body>
+</html>
